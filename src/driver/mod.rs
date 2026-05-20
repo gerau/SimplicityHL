@@ -55,11 +55,11 @@ pub(crate) const MAIN_MODULE: usize = 0;
 /// Represents a single, isolated file in the SimplicityHL project.
 /// In this architecture, a file and a module are the exact same thing.
 #[derive(Debug, Clone)]
-struct Module {
-    source: CanonSourceFile,
+pub struct Module {
+    pub source: CanonSourceFile,
     /// The completely parsed program for this specific file.
     /// it contains all the functions, aliases, and imports defined inside the file.
-    parsed_program: parse::Program,
+    pub parsed_program: parse::Program,
 }
 
 /// An Intermediate Representation that helps transform isolated files into a global program.
@@ -77,7 +77,7 @@ struct Module {
 ///   `A` if `A` depends on `B`).
 /// * **Cycle Detection:** Preventing infinite compiler loops by ensuring no circular
 ///   imports exist before heavy semantic processing begins.
-pub(crate) struct DependencyGraph {
+pub struct DependencyGraph {
     /// Implements the Arena Pattern to act as the sole, centralized owner of all parsed modules.
     ///
     /// In C++ or Java, a graph would typically link dependencies using direct memory
@@ -298,6 +298,10 @@ impl DependencyGraph {
 
             queue.push_back(last_ind);
         }
+    }
+
+    pub fn modules(&self) -> &[Module] {
+        &self.modules
     }
 }
 
